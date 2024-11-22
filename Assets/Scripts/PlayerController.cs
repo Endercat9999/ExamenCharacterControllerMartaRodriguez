@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    
     private CharacterController _controller;
     private Transform _camera;
     private Animator _animator;
@@ -63,9 +62,14 @@ public class CharacterController : MonoBehaviour
           transform.rotation = Quaternion.Euler(0, smoothAngle, 0);  
 
            Vector3 moveDirecion = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
-
           _controller.Move(moveDirecion * _movementSpeed * Time.deltaTime);
         }
+    
+    }
+    void Jump()
+    {
+        _animator.SetBool("IsJumpping", true);
+        _playerGravity.y = Mathf.Sqrt(_jumpHeight * -2 * _gravity);
     }
 
     void Gravity()
@@ -80,19 +84,15 @@ public class CharacterController : MonoBehaviour
 
             _playerGravity.y = -1;
         }
+        
         _controller.Move(_playerGravity * Time.deltaTime);
     }
 
-    void Jump()
-    {
-        _animator.SetBool("IsJumpping", true);
-        _playerGravity.y = Mathf.Sqrt(_jumpHeight * -2 * _gravity);
-    }
-
+   
     bool IsGrouded()
     {
         return Physics.CheckSphere(_sensorPosition.position, _sensorRadius, _groundLayer);
     }
-
+   
 
 }
